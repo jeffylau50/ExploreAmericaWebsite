@@ -11,6 +11,7 @@
     <% for(i=0;i<allDest.length;i++){ %> 
     <h2><%= allDest[i].name%> </h2>
     <h3><%= allDest[i].location %> </h3>
+    <a href="/destination/<%=allDest[i].id%>"><button>Detail</button></a>
     <hr>
     <% } %> 
 </body>

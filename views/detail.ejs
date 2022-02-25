@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destination Detail</title>
+</head>
+<body>
+    <h1>Destination Detail</h1>
+    <h2><%=destDetail.name%></h2>
+    <h2><%=destDetail.price%></h2>
+    <h2><%=destDetail.description%></h2>
+    <h2><%=destDetail.location%></h2>
+    <a href="/destination"><button>Home</button></a>
+    <form action="/destination/<%=destDetail.id%>/delete?_method=DELETE" method="post"><button>Delete</button></form>
+</body>
+</html>
