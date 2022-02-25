@@ -48,4 +48,15 @@ app.delete('/destination/:id/delete', async function (req, res){
     res.redirect('/destination');
 })
 
+app.get('/destination/:id/edit', async function (req, res){
+    let destDetail = await Dest.findById(req.params.id)
+    res.render('editForm.ejs', {destDetail})
+})
+
+app.patch('/destination/:id/edit', async function (req, res){
+    let {name, price, description, location} = req.body
+    await Dest.findByIdAndUpdate(req.params.id, {name, price, description, location})
+    res.redirect(`/destination/${req.params.id}`);
+})
+
 app.listen(3500)
