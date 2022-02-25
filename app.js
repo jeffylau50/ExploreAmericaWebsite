@@ -4,9 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override')
 const Dest = require('./model/destinationModel.js');
-const { defaultMaxListeners } = require('events');
-const res = require('express/lib/response');
-const { findByIdAndDelete } = require('./model/destinationModel.js');
+const ejsMate = require('ejs-mate')
 
 mongoose.connect('mongodb://localhost:27017/exploreamerica')
     .then(() => {
@@ -16,10 +14,11 @@ mongoose.connect('mongodb://localhost:27017/exploreamerica')
         console.log(err)
     })
 
+app.engine('ejs', ejsMate)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'views');
+app.set('view engine', 'ejs');
 app.use(methodOverride('_method'))
 
 app.get('/destination', async function (req, res) {

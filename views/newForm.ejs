@@ -1,28 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Destination</title>
-</head>
-<body>
-    <h1>Create a new Destination!</h1>
-    <form action="/destination/new" method="post" >
-        <label for="nameNew">Name </label>
-        <input type="text" id="nameNew" name="name">
-        <br><br>
-        <label for="priceNew">Price </label>
-        <input type="number" id="priceNew" name="price">
-        <br><br>
-        <label for="descNew">Description </label>
-        <br> 
-        <textarea  id="descNew" name="description" rows="7" cols="50"></textarea>
-        <br><br>
-        <label for="locationNew">Location </label>
-        <input type="text" id="locationNew" name="location">
-        <br><br>
-        <button>Submit</button>
+<% layout('layout/boilerplate.ejs') %>
+    <h1 class="text-center mt-5 mb-3">Create a new Destination!</h1>
+    <div class="col-6 offset-3">
+    <form action="/destination/new" method="post" class="needs-validation" novalidate>
+        <div class="mb-3">
+        <label class="form-label" for="nameNew">Name </label>
+        <input class="form-control" type="text" id="nameNew" name="name" placeholder="Name of Destination" required>
+        <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Please enter a name for your destination
+          </div>
+        </div>
+        <div class="mb-3">
+        <label class="form-label" for="priceNew">Price </label>
+        <div class="input-group">
+        <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroupPrepend">$</span>
+        </div>  
+        <input class="form-control" type="number" id="priceNew" name="price" placeholder="Price" required>
+        <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Please enter a price. Enter 0 if destination is free
+          </div>
+        </div></div>
+        <div class="mb-3">
+        <label class="form-label" for="descNew">Description </label>
+        <textarea class="form-control" id="descNew" name="description" rows="7" cols="50" required placeholder="Share your thoughts about this destination!"></textarea>
+        <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Please enter a description
+          </div>
+    </div>
+    <div class="mb-3"></div>
+        <label class="form-label" for="locationNew">Location </label>
+        <input class="form-control" type="text" id="locationNew" name="location" placeholder="City, State" required>
+        <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Please enter a location
+          </div>
+        <br>
+        <button class="btn btn-danger">Add Destination</button>
+    </div>
+        
     </form>
-</body>
-</html>
+</div>
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+    </script>
