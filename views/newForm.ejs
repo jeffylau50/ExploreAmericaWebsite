@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Destination</title>
+</head>
+<body>
+    <h1>Create a new Destination!</h1>
+    <form action="/destination/new" method="post" >
+        <label for="nameNew">Name </label>
+        <input type="text" id="nameNew" name="name">
+        <br><br>
+        <label for="priceNew">Price </label>
+        <input type="number" id="priceNew" name="price">
+        <br><br>
+        <label for="descNew">Description </label>
+        <br> 
+        <textarea  id="descNew" name="description" rows="7" cols="50"></textarea>
+        <br><br>
+        <label for="locationNew">Location </label>
+        <input type="text" id="locationNew" name="location">
+        <br><br>
+        <button>Submit</button>
+    </form>
+</body>
+</html>

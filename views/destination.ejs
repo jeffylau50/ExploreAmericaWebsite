@@ -7,6 +7,11 @@
     <title>All Destination</title>
 </head>
 <body>
-    <h1>test</h1>
+    <h1>All Destinations are here!</h1>
+    <% for(i=0;i<allDest.length;i++){ %> 
+    <h2><%= allDest[i].name%> </h2>
+    <h3><%= allDest[i].location %> </h3>
+    <hr>
+    <% } %> 
 </body>
 </html>
