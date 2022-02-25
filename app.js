@@ -31,8 +31,8 @@ app.get('/destination/new', function (req, res){
 })
 
 app.post('/destination/new', async function (req, res){
-    let {name, price, description, location} = req.body
-    const p = new Dest({name, price, description, location})
+    let {name, price, description, location, imageURL} = req.body
+    const p = new Dest({name, price, description, location, imageURL})
     p.save().then(p => console.log(p)).catch(err => console.log(err))
     res.redirect('/destination');
 })
@@ -53,8 +53,8 @@ app.get('/destination/:id/edit', async function (req, res){
 })
 
 app.patch('/destination/:id/edit', async function (req, res){
-    let {name, price, description, location} = req.body
-    await Dest.findByIdAndUpdate(req.params.id, {name, price, description, location})
+    let {name, price, description, location, imageURL} = req.body
+    await Dest.findByIdAndUpdate(req.params.id, {name, price, description, location, imageURL})
     res.redirect(`/destination/${req.params.id}`);
 })
 

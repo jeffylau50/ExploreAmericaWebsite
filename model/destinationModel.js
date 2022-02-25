@@ -24,6 +24,10 @@ const destSchema = new mongoose.Schema({
     location: {
         type: String,
         required: true
+    },
+    imageURL : {
+        type: String,
+        required: true
     }
 })
 
