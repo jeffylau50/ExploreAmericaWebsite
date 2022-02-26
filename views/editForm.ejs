@@ -1,19 +1,91 @@
 <% layout('layout/boilerplate.ejs') %>
-    <h1>Edit your Destination!</h1>
-    <form action="/destination/<%=destDetail.id%>/edit?_method=patch" method="post" >
-        <label for="nameEdit">Name </label>
-        <input type="text" id="nameEdit" name="name" value="<%=destDetail.name%>">
-        <br><br>
-        <label for="priceEdit">Price </label>
-        <input type="number" id="priceEdit" name="price" value="<%=destDetail.price%>">
-        <br><br>
-        <label for="descEdit">Description </label>
-        <br> 
-        <textarea  id="descEdit" name="description" rows="7" cols="50"><%=destDetail.description%></textarea>
-        <br><br>
-        <label for="locationEdit">Location </label>
-        <input type="text" id="locationEdit" name="location" value="<%=destDetail.location%>">
-        <br><br>
-        <button>Submit</button>
 
-    </form>
+
+
+<h1 class="text-center mt-5 mb-3">Edit your Destination!</h1>
+<div class="col-6 offset-3">
+<form action="/destination/<%=destDetail.id%>/edit?_method=patch" method="post" class="needs-validation" novalidate>
+    <div class="mb-3">
+    <label class="form-label" for="nameNew">Name </label>
+    <input class="form-control" type="text" id="nameNew" name="name" value="<%=destDetail.name%>"> required>
+    <div class="valid-feedback">
+        Looks good!
+      </div>
+      <div class="invalid-feedback">
+        Please enter a name for your destination
+      </div>
+    </div>
+    <div class="mb-3">
+    <label class="form-label" for="priceNew">Price </label>
+    <div class="input-group">
+    <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroupPrepend">$</span>
+    </div>  
+    <input class="form-control" type="number" id="priceNew" name="price" value="<%=destDetail.price%>" required>
+    <div class="valid-feedback">
+        Looks good!
+      </div>
+      <div class="invalid-feedback">
+        Please enter a price. Enter 0 if destination is free
+      </div>
+    </div></div>
+    <div class="mb-3">
+    <label class="form-label" for="descNew">Description </label>
+    <textarea class="form-control" id="descNew" name="description" rows="7" cols="50" required><%=destDetail.description%></textarea>
+    <div class="valid-feedback">
+        Looks good!
+      </div>
+      <div class="invalid-feedback">
+        Please enter a description
+      </div>
+</div>
+<div class="mb-3"></div>
+    <label class="form-label" for="locationNew">Location </label>
+    <input class="form-control" type="text" id="locationNew" name="location" value="<%=destDetail.location%>" required>
+    <div class="valid-feedback">
+        Looks good!
+      </div>
+      <div class="invalid-feedback">
+        Please enter a location
+      </div>
+      <label class="form-label" for="imageNew">Image URL</label>
+    <input class="form-control" type="text" id="imageNew" name="imageURL" value="<%=destDetail.imageURL%>" placeholder="URL" required>
+    <div class="valid-feedback">
+        Looks good!
+      </div>
+      <div class="invalid-feedback">
+        Please enter an image URL
+      </div>
+    <br>
+    <button class="btn btn-danger">Edit Destination</button>
+    <a href="/destination/<%=destDetail.id%>"><button class="btn btn-info">Back</button></a>
+</div>
+    
+</form>
+</div>
+
+  
+
+
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+          'use strict';
+          window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+              form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+              }, false);
+            });
+          }, false);
+        })();
+        </script>
+    

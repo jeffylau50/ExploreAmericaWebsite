@@ -1,8 +1,21 @@
 <% layout('layout/boilerplate.ejs') %>
-    <h1>Destination Detail</h1>
-    <h2><%=destDetail.name%></h2>
-    <h2><%=destDetail.price%></h2>
-    <h2><%=destDetail.description%></h2>
-    <h2><%=destDetail.location%></h2>
-    <a href="/destination"><button>Home</button></a>
-    <form action="/destination/<%=destDetail.id%>/delete?_method=DELETE" method="post"><button>Delete</button></form>
+<div class="card mt-5" style="width: 55rem;">
+    <img class="card-img-top" style="height: 35rem;" src="<%=destDetail.imageURL%>>" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title"><%=destDetail.name%></h5>
+      <p class="card-text"><%=destDetail.description%></p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">$<%=destDetail.price%></li>
+      <li class="list-group-item"><%=destDetail.location%></li>
+    </ul>
+    <div class="card-body">
+       
+        <form class="d-inline" action="/destination/<%=destDetail.id%>/delete?_method=DELETE" method="post"><button class="btn btn-info d-inline">Delete</button></form>
+        
+        
+                   <a class="d-inline" href="/destination/<%=destDetail.id%>/edit"><button class="btn btn-danger d-inline">Edit</button></a>
+                   
+    </div>
+  </div>
+

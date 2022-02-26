@@ -27,7 +27,7 @@ const destSchema = new mongoose.Schema({
     },
     imageURL : {
         type: String,
-        required: true
+        
     }
 })
 
