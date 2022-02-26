@@ -1,0 +1,9 @@
+<% layout('layout/boilerplate.ejs') %>
+<div class="alert alert-danger mt-5" role="alert">
+    <h4 class="alert-heading">Looks Like Something Went Wrong</h4>
+    <p><%=err.message%></p>
+    <hr>
+    <p class="mb-0">Press button below to return to our home page!</p>
+  </div>
+
+  <a href="/destination"><button class="btn btn-info">Return to Home Page</button></a>
