@@ -1,6 +1,9 @@
 <% layout('layout/boilerplate.ejs') %>
-<div class="card mt-5" style="width: 55rem;">
-    <img class="card-img-top" style="height: 35rem;" src="<%=destDetail.imageURL%>>" alt="Card image cap">
+<div class="container">
+<div class="row">
+<div class="col-8">
+<div class="card mt-5 mb-5">
+    <img class="card-img-top" style="height: 35rem;" src="<%=destDetail.imageURL%>" alt="Card image cap">
     <div class="card-body">
       <h5 class="card-title"><%=destDetail.name%></h5>
       <p class="card-text"><%=destDetail.description%></p>
@@ -14,8 +17,62 @@
         <form class="d-inline" action="/destination/<%=destDetail.id%>/delete?_method=DELETE" method="post"><button class="btn btn-info d-inline">Delete</button></form>
         
         
-                   <a class="d-inline" href="/destination/<%=destDetail.id%>/edit"><button class="btn btn-danger d-inline">Edit</button></a>
+          <a class="d-inline" href="/destination/<%=destDetail.id%>/edit"><button class="btn btn-danger d-inline">Edit</button></a>
                    
     </div>
   </div>
+</div>
+ <div class="col-4 mt-5" >
+  <form action="/destination/<%=destDetail.id%>/newreview" class="needs-validation" method="post" novalidate>
+    <div class="form-group">
+      <label for="ratingNew" class="form-label">Leave your review here!</label>
+      <br>
+      <input type="range" class="form-range" id="ratingNew" value="5" name='review[rating]' min="1" max="5">
+    </div>
+    <div class="form-group">
+      <label for="reviewNew">Review</label>
+      <textarea class="form-control" id="reviewNew" name="review[reviewText]" placeholder="Leave your review here!" required></textarea>
+    
+    <div class="valid-feedback">
+      Looks good!
+    </div>
+    <div class="invalid-feedback">
+      Please provide a review
+    </div>
+  </div>
+    <button type="submit" class="btn btn-primary mb-5">Submit</button>
+  </form>
 
+<% if (destDetail.reviews) { for(i=0;i<destDetail.reviews.length;i++){%>
+<div class="card">
+<div class="card-body">
+  <h5 class="card-title">Rating: <%=destDetail.reviews[i].rating%></h5>
+  <p class="card-text"><%=destDetail.reviews[i].reviewText%></p>
+  <button class="btn btn-info">Delete</button>
+</div>
+</div>
+<% }} %>
+</div>
+</div>
+</div>
+
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+  </script>

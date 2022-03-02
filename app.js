@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const joi = require('joi');
 const methodOverride = require('method-override')
 const Dest = require('./model/destinationModel.js');
+const Review = require('./model/reviews.js')
 const ejsMate = require('ejs-mate')
 const catchasy = require('./tool/catchasy.js')
 const errorHan = require('./tool/error.js')
@@ -52,9 +53,22 @@ app.post('/destination/new', validateDestination, catchasy(async function (req, 
 }))
 
 app.get('/destination/:id', catchasy(async function (req, res){
-    let destDetail = await Dest.findById(req.params.id)
+    let destDetail = await Dest.findById(req.params.id).populate('reviews');
+    console.log(destDetail)
     res.render('detail.ejs', {destDetail})
 }))
+
+app.post('/destination/:id/newreview', catchasy(async function (req, res){
+    const destination = await Dest.findById(req.params.id);
+    const review = new Review(req.body.review);
+    destination.reviews.push(review);
+    console.log(review);
+    console.log(destination);
+    await review.save();
+    await destination.save();
+    res.redirect(`/destination/${req.params.id}`);
+}))
+
 
 app.delete('/destination/:id/delete', catchasy(async function (req, res){
     await Dest.findByIdAndDelete(req.params.id)
@@ -66,7 +80,7 @@ app.get('/destination/:id/edit', catchasy(async function (req, res){
     res.render('editForm.ejs', {destDetail})
 }))
 
-app.patch('/destination/:id/edit', validateDestination, catchasy(async function (req, res){
+app.patch('/destination/:id/edit',validateDestination, catchasy(async function (req, res){
     let {name, price, description, location, imageURL} = req.body
     await Dest.findByIdAndUpdate(req.params.id, {name, price, description, location, imageURL})
     res.redirect(`/destination/${req.params.id}`);

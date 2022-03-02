@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 mongoose.connect('mongodb://localhost:27017/exploreamerica')
 .then(() => {
@@ -28,8 +29,14 @@ const destSchema = new mongoose.Schema({
     imageURL : {
         type: String,
         
+    },
+    reviews :[ 
+        {
+        type: Schema.Types.ObjectId,
+        ref: 'Review'
     }
-})
+]
+});
 
 
 const Dest = mongoose.model('Dest', destSchema)
