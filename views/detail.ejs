@@ -48,7 +48,7 @@
 <div class="card-body">
   <h5 class="card-title">Rating: <%=destDetail.reviews[i].rating%></h5>
   <p class="card-text"><%=destDetail.reviews[i].reviewText%></p>
-  <button class="btn btn-info">Delete</button>
+  <form method="post" action="/destination/<%=destDetail.id%>/review/<%=destDetail.reviews[i].id%>?_method=DELETE"><button class="btn btn-info">Delete</button></form>
 </div>
 </div>
 <% }} %>

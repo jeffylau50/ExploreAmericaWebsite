@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const review = require('../model/reviews.js')
 const Schema = mongoose.Schema;
 
 mongoose.connect('mongodb://localhost:27017/exploreamerica')
@@ -38,7 +39,16 @@ const destSchema = new mongoose.Schema({
 ]
 });
 
+destSchema.post('findOneAndDelete', async function (doc){
+    if (doc){
+        await review.deleteMany({
+            _id: {
+                $in: doc.reviews
+            }
+        })
+    }
+})
 
-const Dest = mongoose.model('Dest', destSchema)
+const Dest = mongoose.model('Dest', destSchema);
 module.exports = Dest;
 

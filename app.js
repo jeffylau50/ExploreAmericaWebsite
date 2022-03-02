@@ -9,7 +9,8 @@ const Review = require('./model/reviews.js')
 const ejsMate = require('ejs-mate')
 const catchasy = require('./tool/catchasy.js')
 const errorHan = require('./tool/error.js')
-const DestSchema = require('./joischema.js')
+const DestSchema = require('./Destjoischema.js')
+const ReviewSchema = require('./Reviewjoischema.js')
 
 mongoose.connect('mongodb://localhost:27017/exploreamerica')
     .then(() => {
@@ -36,6 +37,16 @@ const validateDestination = (req,res,next) => {
     }
 }
 
+const validateReview = (req,res,next) => {
+    const {error} = ReviewSchema.validate(req.body);
+    if (error) {
+        const message = error.details.map(el => el.message).join(',')
+        throw new errorHan(message, 400)
+    } else{
+        next();
+    }
+}
+
 app.get('/destination', catchasy(async function (req, res) {
     let allDest = await Dest.find({});
     res.render('destination.ejs', {allDest})
@@ -54,20 +65,23 @@ app.post('/destination/new', validateDestination, catchasy(async function (req, 
 
 app.get('/destination/:id', catchasy(async function (req, res){
     let destDetail = await Dest.findById(req.params.id).populate('reviews');
-    console.log(destDetail)
     res.render('detail.ejs', {destDetail})
 }))
 
-app.post('/destination/:id/newreview', catchasy(async function (req, res){
+app.post('/destination/:id/newreview', validateReview, catchasy(async function (req, res){
     const destination = await Dest.findById(req.params.id);
     const review = new Review(req.body.review);
     destination.reviews.push(review);
-    console.log(review);
-    console.log(destination);
     await review.save();
     await destination.save();
     res.redirect(`/destination/${req.params.id}`);
 }))
+
+app.delete('/destination/:id/review/:reviewID', catchasy((async function (req, res){
+    await Dest.findByIdAndUpdate(req.params.id, {$pull: {reviews: req.params.reviewID}})
+    await Review.findByIdAndDelete(req.params.reviewID)
+    res.redirect(`/destination/${req.params.id}`);
+})))
 
 
 app.delete('/destination/:id/delete', catchasy(async function (req, res){
