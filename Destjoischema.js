@@ -8,4 +8,6 @@ const destinationSchema = joi.object({
         location: joi.string().required(),
         imageURL: joi.string().required()
     })
-})
+}).unknown()
+
+module.exports = destinationSchema;

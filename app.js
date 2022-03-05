@@ -1,9 +1,13 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const joi = require('joi');
-const methodOverride = require('method-override')
+const methodOverride = require('method-override');
+const session = require('express-session');
+const flash = require('connect-flash')
+
+
 const Dest = require('./model/destinationModel.js');
 const Review = require('./model/reviews.js')
 const ejsMate = require('ejs-mate')
@@ -26,6 +30,23 @@ app.use(express.json())
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'))
+const sessionConfig = {
+    secret: 'SuperSecretStuff',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 30,
+        maxAge: 1000 * 60 * 30
+    }
+}
+app.use(session(sessionConfig));
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success')
+    next();
+})
 
 const validateDestination = (req,res,next) => {
     const {error} = DestSchema.validate(req.body);
@@ -60,7 +81,9 @@ app.post('/destination/new', validateDestination, catchasy(async function (req, 
     let {name, price, description, location, imageURL} = req.body
     const p = new Dest({name, price, description, location, imageURL})
     p.save().then(p => console.log(p)).catch(err => console.log(err))
+    req.flash('success', 'New Destination was successfully created!')
     res.redirect('/destination');
+   
 }))
 
 app.get('/destination/:id', catchasy(async function (req, res){
@@ -74,6 +97,7 @@ app.post('/destination/:id/newreview', validateReview, catchasy(async function (
     destination.reviews.push(review);
     await review.save();
     await destination.save();
+    req.flash('success', 'New Review was successfully created!')
     res.redirect(`/destination/${req.params.id}`);
 }))
 

@@ -6,4 +6,6 @@ const reviewSchema = joi.object({
         rating: joi.number().required()
         
     })
-})
+}).unknown()
+
+module.exports = reviewSchema;
