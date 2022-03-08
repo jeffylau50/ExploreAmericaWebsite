@@ -5,18 +5,19 @@ const mongoose = require('mongoose');
 const joi = require('joi');
 const methodOverride = require('method-override');
 const session = require('express-session');
-const flash = require('connect-flash')
+const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const User = require('./model/userModel.js')
+const User = require('./model/userModel.js');
+const isLoggedIn = require('./middleware');
 
 const Dest = require('./model/destinationModel.js');
-const Review = require('./model/reviews.js')
-const ejsMate = require('ejs-mate')
-const catchasy = require('./tool/catchasy.js')
-const errorHan = require('./tool/error.js')
-const DestSchema = require('./Destjoischema.js')
-const ReviewSchema = require('./Reviewjoischema.js')
+const Review = require('./model/reviews.js');
+const ejsMate = require('ejs-mate');
+const catchasy = require('./tool/catchasy.js');
+const errorHan = require('./tool/error.js');
+const DestSchema = require('./Destjoischema.js');
+const ReviewSchema = require('./Reviewjoischema.js');
 
 mongoose.connect('mongodb://localhost:27017/exploreamerica')
     .then(() => {
@@ -53,9 +54,12 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success')
+    res.locals.error = req.flash('error')
     next();
 })
+
 
 const validateDestination = (req,res,next) => {
     const {error} = DestSchema.validate(req.body);
@@ -77,24 +81,46 @@ const validateReview = (req,res,next) => {
     }
 }
 
+app.get('/login', function (req,res){
+    res.render('login.ejs')
+})
+
+app.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
+  req.flash('success', 'You are logged in!');
+  res.redirect('/destination'); 
+})
+
 app.get('/register', function (req, res){
     res.render('NewUserRegister.ejs')
 })
 
 app.post('/register/new', catchasy(async function(req, res){
+    try{
     const {email, username, password} = req.body;
     const newUser = new User({email, username});
-    const print = await User.register(newUser, password);
-    console.log(print)
+    await User.register(newUser, password);
+    req.flash('success', 'Your account was created successfully!')
     res.redirect('/destination')
+    } catch (e) {
+        req.flash('error', e.message);
+        res.redirect('/register')
+    }
 }))
+
+
+
+app.get('/logout', function (req, res){
+    req.logout();
+    req.flash('success', 'You are logged out.')
+    res.redirect('/destination')
+})
 
 app.get('/destination', catchasy(async function (req, res) {
     let allDest = await Dest.find({});
     res.render('destination.ejs', {allDest})
 }))
 
-app.get('/destination/new', function (req, res){
+app.get('/destination/new', isLoggedIn, function(req, res){
     res.render('newForm.ejs')
 })
 

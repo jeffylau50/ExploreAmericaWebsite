@@ -1,13 +1,7 @@
 <% layout('layout/boilerplate.ejs') %>
-
 <div class="cols-6 offset-3">
-<form action="/register/new" method="post">
-    <h2 class="mt-5">Sign Up to find your next destination!</h1>
-    <div class="form-group mt-5">
-      <label for="InputEmail1">Email address</label>
-      <input type="email"  class="form-control" style="width: 22rem" id="InputEmail1" aria-describedby="emailHelp" name="email" placeholder="Enter email">
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-    </div>
+<form action="/login" method="post">
+    <h2 class="mt-5">Log in to explore more features!</h1>
     <div class="form-group"
     <label for="validationCustomUsername">Username</label>
     <div class="input-group">
@@ -21,10 +15,7 @@
       <label for="exampleInputPassword1">Password</label>
       <input type="password" class="form-control" style="width: 22rem" id="exampleInputPassword1" name="password" placeholder="Password">
     </div>
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">I agree to ©Explore America terms and conditions</label>
-    </div>
+  
     <button type="submit" class="btn btn-primary mt-3">Submit</button>
   </form>
   </div>
