@@ -6,7 +6,9 @@ const joi = require('joi');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash')
-
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./model/userModel.js')
 
 const Dest = require('./model/destinationModel.js');
 const Review = require('./model/reviews.js')
@@ -43,6 +45,13 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
     res.locals.success = req.flash('success')
     next();
@@ -67,6 +76,18 @@ const validateReview = (req,res,next) => {
         next();
     }
 }
+
+app.get('/register', function (req, res){
+    res.render('NewUserRegister.ejs')
+})
+
+app.post('/register/new', catchasy(async function(req, res){
+    const {email, username, password} = req.body;
+    const newUser = new User({email, username});
+    const print = await User.register(newUser, password);
+    console.log(print)
+    res.redirect('/destination')
+}))
 
 app.get('/destination', catchasy(async function (req, res) {
     let allDest = await Dest.find({});
@@ -106,7 +127,6 @@ app.delete('/destination/:id/review/:reviewID', catchasy((async function (req, r
     await Review.findByIdAndDelete(req.params.reviewID)
     res.redirect(`/destination/${req.params.id}`);
 })))
-
 
 app.delete('/destination/:id/delete', catchasy(async function (req, res){
     await Dest.findByIdAndDelete(req.params.id)
