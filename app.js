@@ -81,6 +81,17 @@ const validateReview = (req,res,next) => {
     }
 }
 
+const isAuthor = async (req, res, next) =>{
+    const { id } = req.params;
+    const destination = await Dest.findById(id);
+    console.log(req.user._id)
+    if (!destination.author.equals(req.user._id)){
+        req.flash('error', 'Action is not permitted.');
+        return res.redirect(`/destination/${id}`);
+    }
+    next()
+}
+
 app.get('/login', function (req,res){
     res.render('login.ejs')
 })
@@ -98,8 +109,9 @@ app.post('/register/new', catchasy(async function(req, res){
     try{
     const {email, username, password} = req.body;
     const newUser = new User({email, username});
-    await User.register(newUser, password);
-    req.flash('success', 'Your account was created successfully!')
+    const registeredUser = await User.register(newUser, password);
+    req.login(registeredUser, err => { if (err) return next(err)})
+    req.flash('success', 'Your account was created successfully and you are now logged in!')
     res.redirect('/destination')
     } catch (e) {
         req.flash('error', e.message);
@@ -126,7 +138,8 @@ app.get('/destination/new', isLoggedIn, function(req, res){
 
 app.post('/destination/new', validateDestination, catchasy(async function (req, res){
     let {name, price, description, location, imageURL} = req.body
-    const p = new Dest({name, price, description, location, imageURL})
+    let author = req.user._id;
+    const p = new Dest({name, price, description, location, imageURL, author})
     p.save().then(p => console.log(p)).catch(err => console.log(err))
     req.flash('success', 'New Destination was successfully created!')
     res.redirect('/destination');
@@ -134,7 +147,7 @@ app.post('/destination/new', validateDestination, catchasy(async function (req, 
 }))
 
 app.get('/destination/:id', catchasy(async function (req, res){
-    let destDetail = await Dest.findById(req.params.id).populate('reviews');
+    let destDetail = await Dest.findById(req.params.id).populate('reviews').populate('author');
     res.render('detail.ejs', {destDetail})
 }))
 
@@ -154,12 +167,12 @@ app.delete('/destination/:id/review/:reviewID', catchasy((async function (req, r
     res.redirect(`/destination/${req.params.id}`);
 })))
 
-app.delete('/destination/:id/delete', catchasy(async function (req, res){
+app.delete('/destination/:id/delete', isLoggedIn, isAuthor, catchasy(async function (req, res){
     await Dest.findByIdAndDelete(req.params.id)
     res.redirect('/destination');
 }))
 
-app.get('/destination/:id/edit', catchasy(async function (req, res){
+app.get('/destination/:id/edit', isLoggedIn, isAuthor, catchasy(async function (req, res){
     let destDetail = await Dest.findById(req.params.id)
     res.render('editForm.ejs', {destDetail})
 }))

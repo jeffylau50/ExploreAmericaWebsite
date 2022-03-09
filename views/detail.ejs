@@ -12,7 +12,10 @@
     <ul class="list-group list-group-flush">
       <li class="list-group-item">$<%=destDetail.price%></li>
       <li class="list-group-item"><%=destDetail.location%></li>
+      <li class="list-group-item">Submitted by @<%=destDetail.author.username%></li>
+
     </ul>
+    <% if(currentUser && destDetail.author.equals(currentUser._id)) {%>
     <div class="card-body">
        
         <form class="d-inline" action="/destination/<%=destDetail.id%>/delete?_method=DELETE" method="post"><button class="btn btn-info d-inline">Delete</button></form>
@@ -21,6 +24,8 @@
           <a class="d-inline" href="/destination/<%=destDetail.id%>/edit"><button class="btn btn-danger d-inline">Edit</button></a>
                    
     </div>
+    <% } %>
+
   </div>
 </div>
  <div class="col-4 mt-5" >

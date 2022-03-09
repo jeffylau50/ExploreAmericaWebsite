@@ -2,13 +2,6 @@ const mongoose = require('mongoose');
 const review = require('../model/reviews.js')
 const Schema = mongoose.Schema;
 
-mongoose.connect('mongodb://localhost:27017/exploreamerica')
-.then(() => {
-    console.log('DB connection open')
-})
-.catch(err => {
-    console.log(err)
-})
 
 const destSchema = new mongoose.Schema({
     name: {
@@ -30,6 +23,10 @@ const destSchema = new mongoose.Schema({
     imageURL : {
         type: String,
         
+    },
+    author : {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     reviews :[ 
         {
