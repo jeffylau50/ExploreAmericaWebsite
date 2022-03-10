@@ -31,6 +31,7 @@ app.engine('ejs', ejsMate)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.set('views', path.join(__dirname, 'views'))
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'))
 const sessionConfig = {
@@ -165,6 +166,11 @@ app.get('/destination/:id', catchasy(async function (req, res){
 }))
 
 app.post('/destination/:id/newreview', isLoggedIn, validateReview, catchasy(async function (req, res){
+    if(req.body.review.rating==0){
+        req.flash('error', 'Rating cannot be 0. Please try again'); 
+        return res.redirect(`/destination/${req.params.id}`);
+   
+    }
     const destination = await Dest.findById(req.params.id);
     const {reviewText, rating} = req.body.review;
     const author = req.user._id;
