@@ -1,5 +1,4 @@
 <% layout('layout/boilerplate.ejs') %>
-<%- include('partial/flash.ejs') %>
 <div class="container">
 <div class="row">
 <div class="col-8">
@@ -54,7 +53,10 @@
 <div class="card-body">
   <h5 class="card-title">Rating: <%=destDetail.reviews[i].rating%></h5>
   <p class="card-text"><%=destDetail.reviews[i].reviewText%></p>
+  <p>Submitted by @<%=destDetail.reviews[i].author.username%></p>
+  <% if(currentUser && destDetail.reviews[i].author.equals(currentUser._id)) {%>
   <form method="post" action="/destination/<%=destDetail.id%>/review/<%=destDetail.reviews[i].id%>?_method=DELETE"><button class="btn btn-info">Delete</button></form>
+  <% } %>
 </div>
 </div>
 <% }} %>

@@ -92,6 +92,19 @@ const isAuthor = async (req, res, next) =>{
     next()
 }
 
+const isAuthorforReview = async (req, res, next) =>{
+    const { id } = req.params;
+    const { reviewID } = req.params;
+    const review = await Review.findById(reviewID);
+    console.log(req.user._id)
+    if (!review.author.equals(req.user._id)){
+        req.flash('error', 'Action is not permitted.');
+        return res.redirect(`/destination/${id}`);
+    }
+    next()
+}
+
+
 app.get('/login', function (req,res){
     res.render('login.ejs')
 })
@@ -147,13 +160,15 @@ app.post('/destination/new', validateDestination, catchasy(async function (req, 
 }))
 
 app.get('/destination/:id', catchasy(async function (req, res){
-    let destDetail = await Dest.findById(req.params.id).populate('reviews').populate('author');
+    let destDetail = await Dest.findById(req.params.id).populate({path: 'reviews', populate:{path: 'author'}}).populate('author');
     res.render('detail.ejs', {destDetail})
 }))
 
-app.post('/destination/:id/newreview', validateReview, catchasy(async function (req, res){
+app.post('/destination/:id/newreview', isLoggedIn, validateReview, catchasy(async function (req, res){
     const destination = await Dest.findById(req.params.id);
-    const review = new Review(req.body.review);
+    const {reviewText, rating} = req.body.review;
+    const author = req.user._id;
+    const review = new Review({reviewText, rating, author});
     destination.reviews.push(review);
     await review.save();
     await destination.save();
@@ -161,7 +176,7 @@ app.post('/destination/:id/newreview', validateReview, catchasy(async function (
     res.redirect(`/destination/${req.params.id}`);
 }))
 
-app.delete('/destination/:id/review/:reviewID', catchasy((async function (req, res){
+app.delete('/destination/:id/review/:reviewID', isLoggedIn, isAuthorforReview, catchasy((async function (req, res){
     await Dest.findByIdAndUpdate(req.params.id, {$pull: {reviews: req.params.reviewID}})
     await Review.findByIdAndDelete(req.params.reviewID)
     res.redirect(`/destination/${req.params.id}`);
