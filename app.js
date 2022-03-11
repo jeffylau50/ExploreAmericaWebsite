@@ -8,9 +8,35 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const multer = require('multer');
+
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
+console.log(process.env.CLOUDINARY_KEY)
+
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'ExploreAmerica',
+        allowedFormats: ['jpeg', 'png', 'jpg']
+    }
+})
+
+const upload = multer({storage});
+
 const User = require('./model/userModel.js');
 const isLoggedIn = require('./middleware');
-
 const Dest = require('./model/destinationModel.js');
 const Review = require('./model/reviews.js');
 const ejsMate = require('ejs-mate');
@@ -18,6 +44,7 @@ const catchasy = require('./tool/catchasy.js');
 const errorHan = require('./tool/error.js');
 const DestSchema = require('./Destjoischema.js');
 const ReviewSchema = require('./Reviewjoischema.js');
+
 
 mongoose.connect('mongodb://localhost:27017/exploreamerica')
     .then(() => {
@@ -60,7 +87,6 @@ app.use((req, res, next) => {
     res.locals.error = req.flash('error')
     next();
 })
-
 
 const validateDestination = (req,res,next) => {
     const {error} = DestSchema.validate(req.body);
@@ -150,15 +176,23 @@ app.get('/destination/new', isLoggedIn, function(req, res){
     res.render('newForm.ejs')
 })
 
-app.post('/destination/new', validateDestination, catchasy(async function (req, res){
-    let {name, price, description, location, imageURL} = req.body
-    let author = req.user._id;
-    const p = new Dest({name, price, description, location, imageURL, author})
-    p.save().then(p => console.log(p)).catch(err => console.log(err))
-    req.flash('success', 'New Destination was successfully created!')
-    res.redirect('/destination');
+app.post('/destination/new', validateDestination, upload.array('image', 10), catchasy(async function (req, res){
+    
+     let image = [];
+     if(req.files){
+         for(i=0;i<req.files.length;i++){
+         image.unshift({URL : req.files[i].path, fileName: req.files[i].filename})
+         }
+     }
+
+      let {name, price, description, location} = req.body
+      let author = req.user._id;
+      const p = new Dest({name, price, description, location, image, author})
+      p.save().then(p => console.log(p)).catch(err => console.log(err))
+      req.flash('success', 'New Destination was successfully created!')
+      res.redirect('/destination');
    
-}))
+ }))
 
 app.get('/destination/:id', catchasy(async function (req, res){
     let destDetail = await Dest.findById(req.params.id).populate({path: 'reviews', populate:{path: 'author'}}).populate('author');

@@ -1,7 +1,7 @@
 <% layout('layout/boilerplate.ejs') %>
     <h1 class="text-center mt-5 mb-3">Create a new Destination!</h1>
     <div class="col-6 offset-3">
-    <form action="/destination/new" method="post" class="needs-validation" novalidate>
+    <form action="/destination/new" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
         <div class="mb-3">
         <label class="form-label" for="nameNew">Name </label>
         <input class="form-control" type="text" id="nameNew" name="name" placeholder="Name of Destination" required>
@@ -20,7 +20,6 @@
         </div>  
         <input class="form-control" type="number" id="priceNew" name="price" placeholder="Price" required>
         <div class="valid-feedback">
-            Looks good!
           </div>
           <div class="invalid-feedback">
             Please enter a price. Enter 0 if destination is free
@@ -45,14 +44,9 @@
           <div class="invalid-feedback">
             Please enter a location
           </div>
-          <label class="form-label" for="imageNew">Image URL</label>
-        <input class="form-control" type="text" id="imageNew" name="imageURL" placeholder="URL" required>
-        <div class="valid-feedback">
-            Looks good!
-          </div>
-          <div class="invalid-feedback">
-            Please enter an image URL
-          </div>
+          <br>
+          <input type="file" name="image" multiple>
+        <br>
         <br>
         <button class="btn btn-danger">Add Destination</button>
     </div>
