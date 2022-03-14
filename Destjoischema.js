@@ -6,7 +6,7 @@ const destinationSchema = joi.object({
         price: joi.number().required(),
         description: joi.string().required(),
         location: joi.string().required(),
-        imageURL: joi.string().required()
+        imageURL: joi.string()
     })
 }).unknown()
 

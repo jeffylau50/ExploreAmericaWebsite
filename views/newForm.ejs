@@ -45,7 +45,11 @@
             Please enter a location
           </div>
           <br>
-          <input type="file" name="image" multiple>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="validatedCustomFile" name="image" multiple required>
+            <label class="custom-file-label" for="validatedCustomFile">Choose Image... (required)</label>
+            <div class="invalid-feedback">Picture is required</div>
+          </div>
         <br>
         <br>
         <button class="btn btn-danger">Add Destination</button>

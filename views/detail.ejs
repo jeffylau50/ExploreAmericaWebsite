@@ -1,6 +1,8 @@
 <% layout('layout/boilerplate.ejs') %>
 <link type="text/css" rel="stylesheet" href="/css/ratingStars.css">
 
+
+
 <div class="container">
 <div class="row">
 <div class="col-8">
@@ -40,6 +42,7 @@
       <li class="list-group-item">$<%=destDetail.price%></li>
       <li class="list-group-item"><%=destDetail.location%></li>
       <li class="list-group-item">Submitted by @<%=destDetail.author.username%></li>
+      
 
     </ul>
     <% if(currentUser && destDetail.author.equals(currentUser._id)) {%>
@@ -56,8 +59,10 @@
   </div>
 </div>
  <div class="col-4 mt-5" >
+  <div id='map' class="mb-3" style='width: 300px; height: 300px;'></div>
+
   <form action="/destination/<%=destDetail.id%>/newreview" class="needs-validation" method="post" novalidate>
-    <div class="form-group">
+    <div class="form-group mb-0">
       <label for="ratingNew" class="form-label">Leave your review here!</label>
       <br>
       <fieldset class="starability-checkmark">
@@ -87,6 +92,16 @@
   </div>
     <button type="submit" class="btn btn-primary mb-5">Submit</button>
   </form>
+
+    <form action="/destination/<%=destDetail.id%>/newimage" enctype="multipart/form-data" method="post">
+    <h5 class="mb-3">Share your own images of this destination!</h5>
+    <div class="custom-file">
+    <input type="file" class="custom-file-input" id="validatedCustomFile" name="image" multiple required>
+    <label class="custom-file-label" for="validatedCustomFile">Choose Image...</label>
+    <div class="invalid-feedback">You did not select any image</div>
+  </div>
+  <button class="btn btn-success mt-3 mb-5">Submit</button>
+    </form>
 
 <% if (destDetail.reviews) { for(i=0;i<destDetail.reviews.length;i++){%>
 <div class="card">
@@ -128,3 +143,18 @@
     }, false);
   })();
   </script>
+
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoiamVmZnlsYXU1MCIsImEiOiJjbDBvdDJ2cDUxN3lmM2R0a3k3anZ5Nmw0In0.TjNo0bkKGM5jgk_0HMfw8Q';
+  const map = new mapboxgl.Map({
+  container: 'map', // container ID
+  style: 'mapbox://styles/mapbox/streets-v11', // style URL
+  center:   <%- JSON.stringify(destDetail.geoPoint.coordinates) %>, // starting position [lng, lat]
+  zoom: 9 // starting zoom
+  });
+
+  new mapboxgl.Marker()
+      .setLngLat (<%-JSON.stringify(destDetail.geoPoint.coordinates)%>)
+      .addTo(map)
+  </script>
+

@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -9,10 +13,11 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const multer = require('multer');
+const mapboxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapBoxToken = process.env.MAPBOX_TOKEN
+const geoCoder = mapboxGeocoding({ accessToken: mapBoxToken});
 
-if (process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
-}
+
 
 console.log(process.env.CLOUDINARY_KEY)
 
@@ -111,7 +116,6 @@ const validateReview = (req,res,next) => {
 const isAuthor = async (req, res, next) =>{
     const { id } = req.params;
     const destination = await Dest.findById(id);
-    console.log(req.user._id)
     if (!destination.author.equals(req.user._id)){
         req.flash('error', 'Action is not permitted.');
         return res.redirect(`/destination/${id}`);
@@ -123,7 +127,6 @@ const isAuthorforReview = async (req, res, next) =>{
     const { id } = req.params;
     const { reviewID } = req.params;
     const review = await Review.findById(reviewID);
-    console.log(req.user._id)
     if (!review.author.equals(req.user._id)){
         req.flash('error', 'Action is not permitted.');
         return res.redirect(`/destination/${id}`);
@@ -177,17 +180,23 @@ app.get('/destination/new', isLoggedIn, function(req, res){
 })
 
 app.post('/destination/new', validateDestination, upload.array('image', 10), catchasy(async function (req, res){
-    
+     
      let image = [];
      if(req.files){
          for(i=0;i<req.files.length;i++){
          image.unshift({URL : req.files[i].path, fileName: req.files[i].filename})
          }
      }
-
       let {name, price, description, location} = req.body
+
+      let geoData = await geoCoder.forwardGeocode({
+        query: location,
+        limit: 1
+    }).send()
+      let geoPoint = geoData.body.features[0].geometry;
       let author = req.user._id;
-      const p = new Dest({name, price, description, location, image, author})
+      const p = new Dest({name, price, description, location, geoPoint, image, author})
+      console.log(p)
       p.save().then(p => console.log(p)).catch(err => console.log(err))
       req.flash('success', 'New Destination was successfully created!')
       res.redirect('/destination');
@@ -196,6 +205,10 @@ app.post('/destination/new', validateDestination, upload.array('image', 10), cat
 
 app.get('/destination/:id', catchasy(async function (req, res){
     let destDetail = await Dest.findById(req.params.id).populate({path: 'reviews', populate:{path: 'author'}}).populate('author');
+    console.log(destDetail.geoPoint.coordinates);
+    if (destDetail.geoPoint.coordinates.length<1){destDetail.geoPoint.coordinates = [  -118.2439, 34.0544 ]};
+    console.log(destDetail.geoPoint.coordinates);
+
     res.render('detail.ejs', {destDetail})
 }))
 
@@ -216,17 +229,37 @@ app.post('/destination/:id/newreview', isLoggedIn, validateReview, catchasy(asyn
     res.redirect(`/destination/${req.params.id}`);
 }))
 
+app.post('/destination/:id/newimage', isLoggedIn, upload.array('image', 10), catchasy(async function (req, res){
+    let imageNew = [];
+     if(req.files){
+         for(i=0;i<req.files.length;i++){
+         imageNew.unshift({URL : req.files[i].path, fileName: req.files[i].filename})
+         }
+     }
+     let {image} = await Dest.findById(req.params.id)
+     image.unshift(...imageNew)
+     console.log(image)
+     await Dest.findByIdAndUpdate(req.params.id,{image})
+     req.flash('success', 'New Images was successfully added!')
+     res.redirect(`/destination/${req.params.id}`);
+}))
+
 app.delete('/destination/:id/review/:reviewID', isLoggedIn, isAuthorforReview, catchasy((async function (req, res){
     await Dest.findByIdAndUpdate(req.params.id, {$pull: {reviews: req.params.reviewID}})
-    await Review.findByIdAndDelete(req.params.reviewID)
+    await Review.findByIdAndDelete(req.params.reviewID);
+    req.flash('success', 'Destination was deleted successfully!')
     res.redirect(`/destination/${req.params.id}`);
 })))
 
 app.delete('/destination/:id/delete', isLoggedIn, isAuthor, catchasy(async function (req, res){
+    let {image} = await Dest.findById(req.params.id);
+    console.log(image);
+    for(i=0;i<image.length;i++){
+    await cloudinary.uploader.destroy(image[i].fileName)
+}
     await Dest.findByIdAndDelete(req.params.id)
     res.redirect('/destination');
 }))
-
 app.get('/destination/:id/edit', isLoggedIn, isAuthor, catchasy(async function (req, res){
     let destDetail = await Dest.findById(req.params.id)
     res.render('editForm.ejs', {destDetail})
@@ -248,4 +281,4 @@ if (!err.message) err.message = 'Something went Wrong :('
 res.status(statusCode).render('errorPage.ejs', {err})
 })
 
-app.listen(3500)
+app.listen(3500) 

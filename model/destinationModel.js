@@ -6,28 +6,38 @@ const Schema = mongoose.Schema;
 const destSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
     },
     price: {
         type: Number,
-        required: true
     },
     description: {
         type: String,
-        required: true
     },
     location: {
         type: String,
-        required: true
     },
-    imageURL : {
+
+    geoPoint: {
+        type:{
         type: String,
-        
+        enum: ['Point'],
+        required: true
+        }, 
+        coordinates: {
+            type: [Number],
+            required: true
+        }
     },
+
+    image : [{
+        URL: String, fileName: String
+    }],
     author : {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+
+  
     reviews :[ 
         {
         type: Schema.Types.ObjectId,
