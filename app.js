@@ -14,6 +14,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const destinationRoutes = require('./routes/destination.js')
 const reviewRoutes = require('./routes/review.js')
+const mongoSanitize = require('express-mongo-sanitize')
 
 const User = require('./model/userModel.js');
 const ejsMate = require('ejs-mate');
@@ -35,6 +36,8 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'))
+app.use(mongoSanitize())
+
 const sessionConfig = {
     secret: 'SuperSecretStuff',
     resave: false,

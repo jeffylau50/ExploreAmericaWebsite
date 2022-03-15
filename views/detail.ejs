@@ -4,7 +4,7 @@
 
 <div class="container">
 <div class="row">
-<div class="col-8">
+<div class="col-sm-12 col-md-7 col-lg-8">
 <div class="card mt-5 mb-5">
   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <% if(destDetail.image.length>1){ %>
@@ -73,7 +73,7 @@
 
   </div>
 </div>
- <div class="col-4 mt-5" >
+ <div class="col-sm-12 col-md-4 col-lg-4 mt-5" >
   <div id='map' class="mb-3" style='width: 300px; height: 300px;'></div>
 
   <form action="/destination/<%=destDetail.id%>/review" class="needs-validation" method="post" novalidate>
