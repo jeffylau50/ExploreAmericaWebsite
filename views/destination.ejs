@@ -5,7 +5,7 @@
 <main class="container">
 
     <h1 class="mt-5 mb-5">Check out our most popular destinations!</h1>
-
+    <a href="/destination/<%=allDest[Math.floor(Math.random() * allDest.length)].id%>"><button class="btn btn-success mt-0 mb-4">Take Me Anywhere</button></a>
 
     <div class="row">
     <% for(i=0; i<allDest.length;i=i+3){ %> 

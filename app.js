@@ -17,10 +17,6 @@ const mapboxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapBoxToken = process.env.MAPBOX_TOKEN
 const geoCoder = mapboxGeocoding({ accessToken: mapBoxToken});
 
-
-
-console.log(process.env.CLOUDINARY_KEY)
-
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
@@ -180,8 +176,7 @@ app.get('/', function (req, res) {
 })
 
 app.get('/destination', catchasy(async function (req, res) {
-    let allDest = await Dest.find({});
-    console.log(allDest[0].geoPoint)
+    let allDest = await Dest.find({})
     res.render('destination.ejs', {allDest})
 }))
 
@@ -206,7 +201,6 @@ app.post('/destination/new', validateDestination, upload.array('image', 10), cat
       let geometry = geoData.body.features[0].geometry
       let author = req.user._id;
       const p = new Dest({name, price, description, location, geometry, image, author})
-      console.log(p)
       p.save().then(p => console.log(p)).catch(err => console.log(err))
       req.flash('success', 'New Destination was successfully created!')
       res.redirect('/destination');
@@ -216,10 +210,7 @@ app.post('/destination/new', validateDestination, upload.array('image', 10), cat
 
 app.get('/destination/:id', catchasy(async function (req, res){
     let destDetail = await Dest.findById(req.params.id).populate({path: 'reviews', populate:{path: 'author'}}).populate('author');
-    console.log(destDetail.geometry);
     if (destDetail.geometry.coordinates.length<1){destDetail.geometry.coordinates = [  -118.2439, 34.0544 ]};
-    console.log(destDetail.geometry.coordinates);
-
     res.render('detail.ejs', {destDetail})
 }))
 
@@ -249,7 +240,6 @@ app.post('/destination/:id/newimage', isLoggedIn, upload.array('image', 10), cat
      }
      let {image} = await Dest.findById(req.params.id)
      image.unshift(...imageNew)
-     console.log(image)
      await Dest.findByIdAndUpdate(req.params.id,{image})
      req.flash('success', 'New Images was successfully added!')
      res.redirect(`/destination/${req.params.id}`);
@@ -264,7 +254,6 @@ app.delete('/destination/:id/review/:reviewID', isLoggedIn, isAuthorforReview, c
 
 app.delete('/destination/:id/delete', isLoggedIn, isAuthor, catchasy(async function (req, res){
     let {image} = await Dest.findById(req.params.id);
-    console.log(image);
     for(i=0;i<image.length;i++){
     await cloudinary.uploader.destroy(image[i].fileName)
 }
