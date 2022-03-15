@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const review = require('../model/reviews.js')
 const Schema = mongoose.Schema;
 
+const opts = {toJSON: { virtuals: true}};
 
 const destSchema = new mongoose.Schema({
     name: {
@@ -17,15 +18,13 @@ const destSchema = new mongoose.Schema({
         type: String,
     },
 
-    geoPoint: {
+    geometry: {
         type:{
         type: String,
         enum: ['Point'],
-        required: true
         }, 
         coordinates: {
             type: [Number],
-            required: true
         }
     },
 
@@ -44,7 +43,12 @@ const destSchema = new mongoose.Schema({
         ref: 'Review'
     }
 ]
-});
+
+}, opts);
+
+destSchema.virtual('properties.popUpMarkup').get(function () {
+    return `<a href="/destination/${this._id}">${this.name}</a>`
+})
 
 destSchema.post('findOneAndDelete', async function (doc){
     if (doc){

@@ -116,22 +116,26 @@ const validateReview = (req,res,next) => {
 const isAuthor = async (req, res, next) =>{
     const { id } = req.params;
     const destination = await Dest.findById(id);
-    if (!destination.author.equals(req.user._id)){
+    if (destination.author.equals(req.user._id) || res.locals.currentUser.isAdmin === true){
+        return next();
+    }else {
         req.flash('error', 'Action is not permitted.');
         return res.redirect(`/destination/${id}`);
     }
-    next()
+    
 }
 
 const isAuthorforReview = async (req, res, next) =>{
     const { id } = req.params;
     const { reviewID } = req.params;
     const review = await Review.findById(reviewID);
-    if (!review.author.equals(req.user._id)){
+    if (review.author.equals(req.user._id) || res.locals.currentUser.isAdmin === true){
+        return next();
+    } else {
         req.flash('error', 'Action is not permitted.');
         return res.redirect(`/destination/${id}`);
     }
-    next()
+    
 }
 
 
@@ -151,7 +155,8 @@ app.get('/register', function (req, res){
 app.post('/register/new', catchasy(async function(req, res){
     try{
     const {email, username, password} = req.body;
-    const newUser = new User({email, username});
+    if(username=='admin1'){isAdmin=true};
+    const newUser = new User({email, username, isAdmin});
     const registeredUser = await User.register(newUser, password);
     req.login(registeredUser, err => { if (err) return next(err)})
     req.flash('success', 'Your account was created successfully and you are now logged in!')
@@ -170,8 +175,13 @@ app.get('/logout', function (req, res){
     res.redirect('/destination')
 })
 
+app.get('/', function (req, res) {
+    res.render('homepage.ejs')
+})
+
 app.get('/destination', catchasy(async function (req, res) {
     let allDest = await Dest.find({});
+    console.log(allDest[0].geoPoint)
     res.render('destination.ejs', {allDest})
 }))
 
@@ -193,9 +203,9 @@ app.post('/destination/new', validateDestination, upload.array('image', 10), cat
         query: location,
         limit: 1
     }).send()
-      let geoPoint = geoData.body.features[0].geometry;
+      let geometry = geoData.body.features[0].geometry
       let author = req.user._id;
-      const p = new Dest({name, price, description, location, geoPoint, image, author})
+      const p = new Dest({name, price, description, location, geometry, image, author})
       console.log(p)
       p.save().then(p => console.log(p)).catch(err => console.log(err))
       req.flash('success', 'New Destination was successfully created!')
@@ -203,11 +213,12 @@ app.post('/destination/new', validateDestination, upload.array('image', 10), cat
    
  }))
 
+
 app.get('/destination/:id', catchasy(async function (req, res){
     let destDetail = await Dest.findById(req.params.id).populate({path: 'reviews', populate:{path: 'author'}}).populate('author');
-    console.log(destDetail.geoPoint.coordinates);
-    if (destDetail.geoPoint.coordinates.length<1){destDetail.geoPoint.coordinates = [  -118.2439, 34.0544 ]};
-    console.log(destDetail.geoPoint.coordinates);
+    console.log(destDetail.geometry);
+    if (destDetail.geometry.coordinates.length<1){destDetail.geometry.coordinates = [  -118.2439, 34.0544 ]};
+    console.log(destDetail.geometry.coordinates);
 
     res.render('detail.ejs', {destDetail})
 }))

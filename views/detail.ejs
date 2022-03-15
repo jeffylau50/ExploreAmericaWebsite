@@ -2,7 +2,6 @@
 <link type="text/css" rel="stylesheet" href="/css/ratingStars.css">
 
 
-
 <div class="container">
 <div class="row">
 <div class="col-8">
@@ -39,13 +38,17 @@
       <p class="card-text"><%=destDetail.description%></p>
     </div>
     <ul class="list-group list-group-flush">
+      <% if(destDetail.price === 0){ %>
+        <li class="list-group-item">Free</li>
+      <% }else { %>
       <li class="list-group-item">$<%=destDetail.price%></li>
+      <% }%>
       <li class="list-group-item"><%=destDetail.location%></li>
       <li class="list-group-item">Submitted by @<%=destDetail.author.username%></li>
       
 
     </ul>
-    <% if(currentUser && destDetail.author.equals(currentUser._id)) {%>
+    <% if(currentUser && destDetail.author.equals(currentUser._id)){%>
     <div class="card-body">
        
         <form class="d-inline" action="/destination/<%=destDetail.id%>/delete?_method=DELETE" method="post"><button class="btn btn-info d-inline">Delete</button></form>
@@ -55,6 +58,18 @@
                    
     </div>
     <% } %>
+
+    <% if(currentUser && currentUser.isAdmin==true){%>
+      <div class="card-body">
+         
+          <form class="d-inline" action="/destination/<%=destDetail.id%>/delete?_method=DELETE" method="post"><button class="btn btn-info d-inline">Delete</button></form>
+          
+          
+            <a class="d-inline" href="/destination/<%=destDetail.id%>/edit"><button class="btn btn-danger d-inline">Edit</button></a>
+                     
+      </div>
+      <% } %>
+ 
 
   </div>
 </div>
@@ -115,6 +130,11 @@
   <% if(currentUser && destDetail.reviews[i].author.equals(currentUser._id)) {%>
   <form method="post" action="/destination/<%=destDetail.id%>/review/<%=destDetail.reviews[i].id%>?_method=DELETE"><button class="btn btn-info">Delete</button></form>
   <% } %>
+  <% if(currentUser && currentUser.isAdmin==true) {%>
+    <form method="post" action="/destination/<%=destDetail.id%>/review/<%=destDetail.reviews[i].id%>?_method=DELETE"><button class="btn btn-info">Delete</button></form>
+    <% } %>
+  
+  
 </div>
 </div>
 <% }} %>
@@ -149,12 +169,13 @@
   const map = new mapboxgl.Map({
   container: 'map', // container ID
   style: 'mapbox://styles/mapbox/streets-v11', // style URL
-  center:   <%- JSON.stringify(destDetail.geoPoint.coordinates) %>, // starting position [lng, lat]
+  center:   <%- JSON.stringify(destDetail.geometry.coordinates) %>, // starting position [lng, lat]
   zoom: 9 // starting zoom
   });
-
+  map.addControl(new mapboxgl.NavigationControl());
+2
   new mapboxgl.Marker()
-      .setLngLat (<%-JSON.stringify(destDetail.geoPoint.coordinates)%>)
+      .setLngLat (<%-JSON.stringify(destDetail.geometry.coordinates)%>)
       .addTo(map)
   </script>
 

@@ -36,13 +36,12 @@ let picArray17 = ['https://source.unsplash.com/collection/190727/',
 
 
 
-
 const seed = async () => {
     await Dest.deleteMany({})
     for (i = 0; i < 50; i++) {
         Dest.insertMany([{ name: descriptors[randomNum(descriptors.length)] + " " + places[randomNum(places.length)], price: randomNum(500), 
         description: ' Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptate libero aliquam velit hic, eum fugiat illum aliquid error dolorum quis consequatur mollitia sit explicabo minima, minus earum officia corrupti harum non facere, enim tempora odio labore fugit? Corporis quis officia qui ut porro sequi quos voluptatum facere inventore sapiente? Dignissimos!', 
-        location : city[i].city + ', ' + city[i].state, 
+        location : city[i].city + ', ' + city[i].state, geometry : { type: 'Point', coordinates: [city[i].longitude , city[i].latitude]}, 
         image : [{URL: picArray17[randomNum(17)], fileName: 'file'}], author: '6226edb967ddba61ec268c82'}])
     }
 }

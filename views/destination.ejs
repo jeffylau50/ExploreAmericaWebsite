@@ -1,21 +1,69 @@
-<% layout('layout/boilerplate.ejs') %>
+<% layout('layout/Destboiler.ejs') %>
+<div class="container-fluid p-0">
+<div id="map" style="height: 500px"></div>
+</div>
+<main class="container">
 
-    <h1 class="mt-5 mb-5">All Destinations are here!</h1>
-    <% for(i=0;i<allDest.length;i++){ %> 
-    
-      <div class="card mb-4" >
-        <div class="row">
-          <div class="col-md-4">
-            <img class="img-fluid" style="height: 17rem; width: 55rem;" src="<%=allDest[i].image[0].URL%>" alt="Card image cap">
-          </div>
-          <div class="col-mg-8">
-            <div class="card-body">
-              <h5 class="card-title"><%=allDest[i].name%></h5>
-              <p class="card-text"><%= allDest[i].location %></p>
-              <p class="card-text">$<%= allDest[i].price %></p>
-              <a href="/destination/<%=allDest[i].id%>"><button class="btn btn-info">Detail</button></a>
-            </div>
-          </div>
+    <h1 class="mt-5 mb-5">Check out our most popular destinations!</h1>
+
+
+    <div class="row">
+    <% for(i=0; i<allDest.length;i=i+3){ %> 
+        <div class="col-sm-4 mb-5">
+      <div class="card" style="width: 18rem; height: 35rem;">
+        <img class="card-img-top" style="height: 15rem;" src="<%=allDest[i].image[0].URL%>" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title"><%=allDest[i].name%></h5>
+          <p class="card-text"><%= allDest[i].location.substring(0,25) %></p>
+          <p class="card-text"><%= allDest[i].description.substring(0,100) + '...' %></p>
+          <a href="/destination/<%=allDest[i].id%>"><button class="btn btn-info">View Destination</button></a>
         </div>
-      </div>
+        </div>
+        </div>
+      
     <% } %> 
+    <% for(i=1; i<allDest.length;i=i+3){ %> 
+      <div class="col-sm-4 mb-5">
+    <div class="card" style="width: 18rem; height: 35rem;">
+      <img class="card-img-top" style="height: 15rem;" src="<%=allDest[i].image[0].URL%>" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title"><%=allDest[i].name%></h5>
+        <p class="card-text"><%= allDest[i].location.substring(0,25) %></p>
+        <p class="card-text"><%= allDest[i].description.substring(0,100) + '...' %></p>
+        <a href="/destination/<%=allDest[i].id%>"><button class="btn btn-info">View Destination</button></a>
+      </div>
+      </div>
+      </div>
+    
+  <% } %> 
+
+  <% for(i=2; i<allDest.length;i=i+3){ %> 
+    <div class="col-sm-4 mb-5">
+  <div class="card" style="width: 18rem; height: 35rem;">
+    <img class="card-img-top" style="height: 15rem;" src="<%=allDest[i].image[0].URL%>" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title"><%=allDest[i].name%></h5>
+      <p class="card-text"><%= allDest[i].location.substring(0,25) %></p>
+      <p class="card-text"><%= allDest[i].description.substring(0,100) + '...' %></p>
+      <a href="/destination/<%=allDest[i].id%>"><button class="btn btn-info">View Destination</button></a>
+    </div>
+    </div>
+    </div>
+  
+<% } %> 
+     
+
+  </div>
+
+
+  </main>
+
+  
+    <script>
+       
+       const destinationAll = {features: <%- JSON.stringify(allDest) %>}
+       console.log(destinationAll)
+    </script>
+
+  
+    <script src="/javascript/clusterMap.js"></script>
