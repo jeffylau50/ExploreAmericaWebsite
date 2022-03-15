@@ -1,21 +1,49 @@
 <% layout('layout/boilerplate.ejs') %>
-<div class="cols-6 offset-3">
-<form action="/login" method="post">
-    <h2 class="mt-5">Log in to explore more features!</h1>
-    <div class="form-group"
-    <label for="validationCustomUsername">Username</label>
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroupPrepend">@</span>
-        <input type="text" class="form-control" id="validationCustomUsername" style="width: 19.5rem" name="username" placeholder="Username">
-      </div>
+<div class="cols-6 offset-3 mt-5">
+  <div class="card" style="width: 25rem;">
+    <img class="card-img-top" src="https://res.cloudinary.com/djgjwxdih/image/upload/v1647304882/ExploreAmerica/Calagus_Islands_prbcvj.jpg" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Login</h5>
+      <form class="needs-validation" action="/login" method="post" novalidate>
+        <div class="form-group"
+        <label for="validationCustomUsername">Username</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupPrepend">@</span>
+            <input type="text" class="form-control" id="validationCustomUsername" style="width: 19.5rem" name="username" placeholder="Username" required>
+          </div>
+          
+        </div>
+          </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input type="password" class="form-control" style="width: 22rem" id="exampleInputPassword1" name="password" placeholder="Password" required>
+        </div>
+      
+        <button type="submit" class="btn btn-primary btn-block mt-3">Submit</button>
+      </form>
+      <b><p class="card-text mt-3">New User? Click <a href="/register">Here</a> to Sign Up</p></b>
     </div>
-      </div>
-    <div class="form-group">
-      <label for="exampleInputPassword1">Password</label>
-      <input type="password" class="form-control" style="width: 22rem" id="exampleInputPassword1" name="password" placeholder="Password">
-    </div>
-  
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
-  </form>
   </div>
+  </div>
+
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+    </script>

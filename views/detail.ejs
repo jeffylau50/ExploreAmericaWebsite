@@ -76,7 +76,7 @@
  <div class="col-4 mt-5" >
   <div id='map' class="mb-3" style='width: 300px; height: 300px;'></div>
 
-  <form action="/destination/<%=destDetail.id%>/newreview" class="needs-validation" method="post" novalidate>
+  <form action="/destination/<%=destDetail.id%>/review" class="needs-validation" method="post" novalidate>
     <div class="form-group mb-0">
       <label for="ratingNew" class="form-label">Leave your review here!</label>
       <br>
@@ -133,15 +133,16 @@
   <% if(currentUser && currentUser.isAdmin==true) {%>
     <form method="post" action="/destination/<%=destDetail.id%>/review/<%=destDetail.reviews[i].id%>?_method=DELETE"><button class="btn btn-info">Delete</button></form>
     <% } %>
-  
-  
 </div>
+  
 </div>
 <% }} %>
 </div>
 </div>
 </div>
+<div class="mb-5">
 
+</div>
 
 <script>
   // Example starter JavaScript for disabling form submissions if there are invalid fields

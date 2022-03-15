@@ -1,7 +1,10 @@
 <% layout('layout/boilerplate.ejs') %>
-    <h1 class="text-center mt-5 mb-3">Create a new Destination!</h1>
-    <div class="col-6 offset-3">
-    <form action="/destination/new" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+<div class="cols-6 offset-3 mt-5 mb-5">
+  <div class="card" style="width: 36rem;">
+    <img class="card-img-top" src="https://res.cloudinary.com/djgjwxdih/image/upload/v1647336113/ExploreAmerica/Onay_Beach_govbh2.jpg" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Create a new Destination!</h5>
+      <form action="/destination/new" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
         <div class="mb-3">
         <label class="form-label" for="nameNew">Name </label>
         <input class="form-control" type="text" id="nameNew" name="name" placeholder="Name of Destination" required>
@@ -36,8 +39,8 @@
           </div>
     </div>
     <div class="mb-3"></div>
-        <label class="form-label" for="locationNew">Location </label>
-        <input class="form-control" type="text" id="locationNew" name="location" placeholder="City, State" required>
+        <label class="form-label" for="locationNew">Location</label>
+        <input class="form-control" type="text" id="locationNew" name="location" placeholder="City, State (e.g. Big Bear, California)" required>
         <div class="valid-feedback">
             Looks good!
           </div>
@@ -56,7 +59,9 @@
     </div>
         
     </form>
-</div>
+    </div>
+  </div>
+  </div>
 
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
