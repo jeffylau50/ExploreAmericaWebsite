@@ -15,7 +15,9 @@ const LocalStrategy = require('passport-local');
 const destinationRoutes = require('./routes/destination.js')
 const reviewRoutes = require('./routes/review.js')
 const mongoSanitize = require('express-mongo-sanitize')
+const MongoStore = require('connect-mongo');
 const dbURL = process.env.DBURL
+//process.env.DBURL
 
 
 const User = require('./model/userModel.js');
@@ -25,7 +27,7 @@ const errorHan = require('./tool/error.js');
 
 //'mongodb://localhost:27017/exploreamerica'
 
-mongoose.connect('mongodb://localhost:27017/exploreamerica')
+mongoose.connect(dbURL)
     .then(() => {
         console.log('database connected')
     })
@@ -42,9 +44,26 @@ app.set('view engine', 'ejs');
 app.use(methodOverride('_method'))
 app.use(mongoSanitize())
 
+const secret = process.env.SECRET;
+
+const store = MongoStore.create({
+    mongoUrl: dbURL,
+    
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+    secret: secret
+    }
+});
+
+store.on("error", function (e){
+    console.log('store error', e)
+})
+
+
 const sessionConfig = {
+    store,
     name: 'EA',
-    secret: 'SuperSecretStuff',
+    secret: secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -115,14 +134,14 @@ app.get('/', function (req, res) {
     res.render('homepage.ejs')
 })
 
-// app.all('*', (req, res, next) => {
-//     next(new errorHan('Page Not Found :(', 404))
-// })
+app.all('*', (req, res, next) => {
+     next(new errorHan('Page Not Found :(', 404))
+ })
 
-// app.use((err, req, res, next) => {
-// const {statusCode = 500} = err;
-// if (!err.message) err.message = 'Something went Wrong :('
-// res.status(statusCode).render('errorPage.ejs', {err})
-// })
+ app.use((err, req, res, next) => {
+ const {statusCode = 500} = err;
+ if (!err.message) err.message = 'Something went Wrong :('
+ res.status(statusCode).render('errorPage.ejs', {err})
+ })
 
 app.listen(3500) 

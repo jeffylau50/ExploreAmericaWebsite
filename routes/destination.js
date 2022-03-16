@@ -62,13 +62,12 @@ const validateDestination = (req,res,next) => {
     }
 }
 
-router.get('/', async function (req, res) {
+router.get('/', catchasy(async function (req, res) {
     let allDest = await Dest.find({});
     let randomNum = Math.floor(Math.random() * allDest.length);
-    console.log(randomNum)
     res.locals.title = "Destinations";
     res.render('destination.ejs', {allDest, randomNum})
-})
+}))
 
 router.get('/new', isLoggedIn, function(req, res){
     res.locals.title = "New Destination";
