@@ -112,7 +112,7 @@ app.get('/register', function (req, res){
 app.post('/register/new', catchasy(async function(req, res){
     try{
     const {email, username, password} = req.body;
-    if(username=='admin1'){isAdmin=true};
+    let isAdmin=false;
     const newUser = new User({email, username, isAdmin});
     const registeredUser = await User.register(newUser, password);
     req.login(registeredUser, err => { if (err) return next(err)})
