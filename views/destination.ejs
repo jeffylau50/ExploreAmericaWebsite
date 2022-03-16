@@ -5,29 +5,35 @@
 <main class="container">
 
     <h1 class="mt-5 mb-5">Check out our most popular destinations!</h1>
-    <a href="/destination/<%=allDest[Math.floor(Math.random() * allDest.length)].id%>"><button class="btn btn-success mt-0 mb-4">Take Me Anywhere</button></a>
-
     <div class="row">
-    <% for(i=0; i<allDest.length;i=i+3){ %> 
+      <% for(i=0; i<allDest.length;i=i+allDest.length){ %> 
+        <a href="/destination/<%=allDest[randomNum].id%>"><button class="btn btn-success mt-0 mb-4">Take Me Anywhere</button></a>
+
+        <% } %> 
+    </div>
+        <div class="row">
+
+      <% for(i=0; i<allDest.length;i=i+3){ %> 
         <div class="col-sm-12 col-md-6 col-lg-4 mb-5">
       <div class="card" style="width: 20rem; height: 35rem;">
-        <img class="card-img-top" style="height: 15rem;" src="<%=allDest[i].image[0].URL%>" alt="Card image cap">
+        <img class="card-img-top" style="height: 15rem;" src="<%=allDest[i].image[0].URL%>" alt="Card image cap"></a>
         <div class="card-body">
-          <h5 class="card-title"><%=allDest[i].name%></h5>
+          <a href="/destination/<%=allDest[i].id%>"><h5 class="card-title"><%=allDest[i].name%></h5></a>
           <p class="card-text"><%= allDest[i].location.substring(0,25) %></p>
           <p class="card-text"><%= allDest[i].description.substring(0,100) + '...' %></p>
           <a href="/destination/<%=allDest[i].id%>"><button class="btn btn-info">View Destination</button></a>
         </div>
         </div>
         </div>
-      
+
     <% } %> 
+
     <% for(i=1; i<allDest.length;i=i+3){ %> 
       <div class="col-sm-12 col-md-6 col-lg-4 mb-5">
     <div class="card" style="width: 20rem; height: 35rem;">
       <img class="card-img-top" style="height: 15rem;" src="<%=allDest[i].image[0].URL%>" alt="Card image cap">
       <div class="card-body">
-        <h5 class="card-title"><%=allDest[i].name%></h5>
+        <a href="/destination/<%=allDest[i].id%>"><h5 class="card-title"><%=allDest[i].name%></h5></a>
         <p class="card-text"><%= allDest[i].location.substring(0,25) %></p>
         <p class="card-text"><%= allDest[i].description.substring(0,100) + '...' %></p>
         <a href="/destination/<%=allDest[i].id%>"><button class="btn btn-info">View Destination</button></a>
@@ -42,7 +48,7 @@
   <div class="card" style="width: 20rem; height: 35rem;">
     <img class="card-img-top" style="height: 15rem;" src="<%=allDest[i].image[0].URL%>" alt="Card image cap">
     <div class="card-body">
-      <h5 class="card-title"><%=allDest[i].name%></h5>
+      <a href="/destination/<%=allDest[i].id%>"><h5 class="card-title"><%=allDest[i].name%></h5></a>
       <p class="card-text"><%= allDest[i].location.substring(0,25) %></p>
       <p class="card-text"><%= allDest[i].description.substring(0,100) + '...' %></p>
       <a href="/destination/<%=allDest[i].id%>"><button class="btn btn-info">View Destination</button></a>

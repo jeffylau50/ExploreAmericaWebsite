@@ -62,12 +62,16 @@ const validateDestination = (req,res,next) => {
     }
 }
 
-router.get('/', catchasy(async function (req, res) {
-    let allDest = await Dest.find({})
-    res.render('destination.ejs', {allDest})
-}))
+router.get('/', async function (req, res) {
+    let allDest = await Dest.find({});
+    let randomNum = Math.floor(Math.random() * allDest.length);
+    console.log(randomNum)
+    res.locals.title = "Destinations";
+    res.render('destination.ejs', {allDest, randomNum})
+})
 
 router.get('/new', isLoggedIn, function(req, res){
+    res.locals.title = "New Destination";
     res.render('newForm.ejs')
 })
 
@@ -96,6 +100,7 @@ router.post('/new', validateDestination, upload.array('image', 10), catchasy(asy
 
 router.get('/:id', catchasy(async function (req, res){
     let destDetail = await Dest.findById(req.params.id).populate({path: 'reviews', populate:{path: 'author'}}).populate('author');
+    res.locals.title = `${destDetail.name}`;
     if (destDetail.geometry.coordinates.length<1){destDetail.geometry.coordinates = [  -118.2439, 34.0544 ]};
     res.render('detail.ejs', {destDetail})
 }))
@@ -124,6 +129,7 @@ router.delete('/:id/delete', isLoggedIn, isAuthor, catchasy(async function (req,
     res.redirect('/destination');
 }))
 router.get('/:id/edit', isLoggedIn, isAuthor, catchasy(async function (req, res){
+    res.locals.title = "Edit Destination";
     let destDetail = await Dest.findById(req.params.id)
     res.render('editForm.ejs', {destDetail})
 }))

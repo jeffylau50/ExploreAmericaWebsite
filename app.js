@@ -15,15 +15,19 @@ const LocalStrategy = require('passport-local');
 const destinationRoutes = require('./routes/destination.js')
 const reviewRoutes = require('./routes/review.js')
 const mongoSanitize = require('express-mongo-sanitize')
+const dbURL = process.env.DBURL
+
 
 const User = require('./model/userModel.js');
 const ejsMate = require('ejs-mate');
 const catchasy = require('./tool/catchasy.js');
 const errorHan = require('./tool/error.js');
 
+//'mongodb://localhost:27017/exploreamerica'
+
 mongoose.connect('mongodb://localhost:27017/exploreamerica')
     .then(() => {
-        console.log('DB connection open')
+        console.log('database connected')
     })
     .catch(err => {
         console.log(err)
@@ -39,11 +43,13 @@ app.use(methodOverride('_method'))
 app.use(mongoSanitize())
 
 const sessionConfig = {
+    name: 'EA',
     secret: 'SuperSecretStuff',
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
+        // secure: true,
         expires: Date.now() + 1000 * 60 * 30,
         maxAge: 1000 * 60 * 30
     }
@@ -70,6 +76,7 @@ app.use('/destination', destinationRoutes)
 app.use('/destination/:id/review', reviewRoutes )
 
 app.get('/login', function (req,res){
+    res.locals.title = "LogIn";
     res.render('login.ejs')
 })
 
@@ -79,6 +86,7 @@ app.post('/login', passport.authenticate('local', {failureFlash: true, failureRe
 })
 
 app.get('/register', function (req, res){
+    res.locals.title = "New User";
     res.render('NewUserRegister.ejs')
 })
 
@@ -107,14 +115,14 @@ app.get('/', function (req, res) {
     res.render('homepage.ejs')
 })
 
-app.all('*', (req, res, next) => {
-    next(new errorHan('Page Not Found :(', 404))
-})
+// app.all('*', (req, res, next) => {
+//     next(new errorHan('Page Not Found :(', 404))
+// })
 
-app.use((err, req, res, next) => {
-const {statusCode = 500} = err;
-if (!err.message) err.message = 'Something went Wrong :('
-res.status(statusCode).render('errorPage.ejs', {err})
-})
+// app.use((err, req, res, next) => {
+// const {statusCode = 500} = err;
+// if (!err.message) err.message = 'Something went Wrong :('
+// res.status(statusCode).render('errorPage.ejs', {err})
+// })
 
 app.listen(3500) 
