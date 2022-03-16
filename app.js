@@ -144,4 +144,6 @@ app.all('*', (req, res, next) => {
  res.status(statusCode).render('errorPage.ejs', {err})
  })
 
-app.listen(3500) 
+ const port = process.env.PORT
+
+app.listen(port) 
