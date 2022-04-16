@@ -119,4 +119,4 @@ app.all('*', (req, res, next) => {
 
  const port = process.env.PORT
 
-app.listen(3500) 
+app.listen(port) 
