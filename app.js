@@ -16,6 +16,7 @@ const destinationRoutes = require('./routes/destination.js')
 const reviewRoutes = require('./routes/review.js')
 const mongoSanitize = require('express-mongo-sanitize')
 const MongoStore = require('connect-mongo');
+const appController = require('./controller/appController.js')
 const dbURL = process.env.DBURL
 //process.env.DBURL
 
@@ -94,45 +95,17 @@ app.use((req, res, next) => {
 app.use('/destination', destinationRoutes)
 app.use('/destination/:id/review', reviewRoutes )
 
-app.get('/login', function (req,res){
-    res.locals.title = "LogIn";
-    res.render('login.ejs')
-})
+app.get('/login', appController.loginGet)
 
-app.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
-  req.flash('success', 'You are logged in!');
-  res.redirect('/destination'); 
-})
+app.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), appController.loginPost )
 
-app.get('/register', function (req, res){
-    res.locals.title = "New User";
-    res.render('NewUserRegister.ejs')
-})
+app.get('/register', appController.registerGet);
 
-app.post('/register/new', catchasy(async function(req, res){
-    try{
-    const {email, username, password} = req.body;
-    let isAdmin=false;
-    const newUser = new User({email, username, isAdmin});
-    const registeredUser = await User.register(newUser, password);
-    req.login(registeredUser, err => { if (err) return next(err)})
-    req.flash('success', 'Your account was created successfully and you are now logged in!')
-    res.redirect('/destination')
-    } catch (e) {
-        req.flash('error', e.message);
-        res.redirect('/register')
-    }
-}))
+app.post('/register/new', catchasy(appController.newUserpost));
 
-app.get('/logout', function (req, res){
-    req.logout();
-    req.flash('success', 'You are logged out.')
-    res.redirect('/destination')
-})
+app.get('/logout', appController.logout)
 
-app.get('/', function (req, res) {
-    res.render('homepage.ejs')
-})
+app.get('/', appController.homepage)
 
 app.all('*', (req, res, next) => {
      next(new errorHan('Page Not Found :(', 404))
@@ -146,4 +119,4 @@ app.all('*', (req, res, next) => {
 
  const port = process.env.PORT
 
-app.listen(port) 
+app.listen(3500) 
