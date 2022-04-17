@@ -51,15 +51,17 @@ Built in Email/ Username/ Password Login system
 
 <img src="https://github.com/jeffylau50/ExploreAmericaWebsite/blob/master/demo/EAregisterDemo.gif"/>
 
+### User Generated Content & Mini Map
+
+The majority of contents of this website relys on submits from users. Users are able to create a new travel destination of their choice on the website. The system will automatically show the correct location on the mini map based on the location the user entered.
+
+<img src="https://github.com/jeffylau50/ExploreAmericaWebsite/blob/master/demo/createDemo.gif"/>
+
 ### Cluster Map Feature
 
 Every single destination input from user will be automatically added to this main cluster map. Clicking on the map markers would redirect your browser to the corresponding detail page of that destination.
 
 <img src="https://github.com/jeffylau50/ExploreAmericaWebsite/blob/master/demo/mapDemo.gif"/>
-
-### User Generated Content
-
-The majority of contents of this website relys on submits from users. Users are able to create a new travel destination of their choice on the website. 
 
 
 ## Performance
