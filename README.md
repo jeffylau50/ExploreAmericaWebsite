@@ -21,12 +21,7 @@ Although this app was mainly developed for the desktop web platform, mobile adap
 
 ***iPhone 11 Demo***
 
-<img src="https://github.com/jeffylau50/OnlineChatApp/blob/master/demo/mobileDemo1.gif" width="414" height="900"/>
-
-
-<img src="https://github.com/jeffylau50/OnlineChatApp/blob/master/demo/mobileDemo2.gif" width="414" height="900"/>
-
-
+<img src="https://github.com/jeffylau50/ExploreAmericaWebsite/blob/master/demo/EAmobileDemo.gif" width="414" height="900"/>
 
 ## Table of Contents
 
@@ -52,7 +47,7 @@ $ node app.js
 
 ### Sign in and Register Methods
 
-1. Built in Email/ Username/ Password LogIn system
+1. Built in Email/ Username/ Password Login system
 
 ### Icon and Display Name Feature
 
