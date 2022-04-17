@@ -63,6 +63,23 @@ Every single destination input from user will be automatically added to this mai
 
 <img src="https://github.com/jeffylau50/ExploreAmericaWebsite/blob/master/demo/mapDemo.gif"/>
 
+### Image Upload Feature
+
+The author of each destination are able to upload image to their page when they create the destination. Aside from that, any other users are able to add more image to any destinations they want.
+
+<img src="https://github.com/jeffylau50/ExploreAmericaWebsite/blob/master/demo/uploadImage.png"/>
+
+### Edit and Delete Feature
+
+The author (or admin) of each destination page have the option to edit or delete their page while other user does not have access to that feature/button.
+
+<img src="https://github.com/jeffylau50/ExploreAmericaWebsite/blob/master/demo/editdeleteDemo.gif"/>
+
+### Review System
+
+Users can leave their own review and stars (from 1 star to 5 stars ) on each destination page. Only admin or author of the review can delete a review.
+
+<img src="https://github.com/jeffylau50/ExploreAmericaWebsite/blob/master/demo/reviewDemo.gif"/>
 
 ## Performance
 
