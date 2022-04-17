@@ -67,7 +67,7 @@ Every single destination input from user will be automatically added to this mai
 
 The author of each destination are able to upload image to their page when they create the destination. Aside from that, any other users are able to add more image to any destinations they want.
 
-<img src="https://github.com/jeffylau50/ExploreAmericaWebsite/blob/master/demo/uploadImage.png"/>
+<img src="https://github.com/jeffylau50/ExploreAmericaWebsite/blob/master/demo/uploadImage.PNG"/>
 
 ### Edit and Delete Feature
 
