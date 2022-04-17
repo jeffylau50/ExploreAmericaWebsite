@@ -4,7 +4,7 @@ This full Stack Travel Website built with EJS, Node.js & MongoDB.
 
 Deployed on Heroku: [https://frozen-anchorage-09220.herokuapp.com/]
 
-Front End: HTML, CSS, Bootstrap, Javascript, EJS Templating Engine
+Front End: HTML, CSS, Bootstrap, Javascript, EJS Templating Engine  
 Back End: Node.js, Express.js, MongoDB  
 Deployment: Heroku  
 
