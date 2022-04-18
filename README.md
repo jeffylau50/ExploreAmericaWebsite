@@ -8,7 +8,7 @@ Front End: HTML, CSS, Bootstrap, Javascript, EJS Templating Engine
 Back End: Node.js, Express.js, MongoDB  
 Deployment: Heroku  
 
-***This website achieved a score of 90%+ on Google PageSpeed Insights***
+***This website achieved a score of 99% on Google PageSpeed Insights***
 
 ***Window 10 PC Demo***
 
@@ -86,6 +86,6 @@ Users can leave their own review and stars (from 1 star to 5 stars ) on each des
 
 ### Performance Scores
 
-***This website achieved a score of 90%+ on Google PageSpeed Insights***
+***This website achieved a score of 99% on Google PageSpeed Insights***
 
 <img src="https://github.com/jeffylau50/ExploreAmericaWebsite/blob/master/demo/testResult.PNG"/>
