@@ -1,6 +1,6 @@
 # Explore America | Travel Website
 
-This full Stack Travel Website built with EJS, Node.js & MongoDB.
+This full Stack Travel Website was built with EJS, Node.js & MongoDB.
 
 Deployed on Heroku: [https://frozen-anchorage-09220.herokuapp.com/]
 
