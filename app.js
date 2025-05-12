@@ -17,7 +17,7 @@ const reviewRoutes = require('./routes/review.js')
 const mongoSanitize = require('express-mongo-sanitize')
 const MongoStore = require('connect-mongo');
 const appController = require('./controller/appController.js')
-const dbURL = process.env.DBURL
+const dbURL = process.env.MONGODB_URI
 //process.env.DBURL
 
 
@@ -47,12 +47,15 @@ app.use(mongoSanitize())
 
 const secret = process.env.SECRET;
 
+if (!dbURL) throw new Error('MONGODB_URI environment variable not set!');
+if (!process.env.SECRET) throw new Error('SECRET environment variable not set!');
+
 const store = MongoStore.create({
     mongoUrl: dbURL,
     
     touchAfter: 24 * 60 * 60,
     crypto: {
-    secret: secret
+    secret: process.env.SECRET
     }
 });
 
